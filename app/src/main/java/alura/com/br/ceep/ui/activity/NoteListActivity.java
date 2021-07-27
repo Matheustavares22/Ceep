@@ -1,7 +1,6 @@
 package alura.com.br.ceep.ui.activity;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,7 +11,7 @@ import java.util.List;
 import alura.com.br.ceep.R;
 import alura.com.br.ceep.dao.Note;
 import alura.com.br.ceep.model.NoteDAO;
-import alura.com.br.ceep.ui.recyclerview.adapter.noteListAdapter;
+import alura.com.br.ceep.ui.recyclerview.adapter.NoteListAdapter;
 
 public class NoteListActivity extends AppCompatActivity {
 
@@ -29,7 +28,7 @@ public class NoteListActivity extends AppCompatActivity {
         }
         List<Note> allNotes = noteDAO.all();
 
-        noteList.setAdapter(new noteListAdapter(allNotes));
+        noteList.setAdapter(new NoteListAdapter(allNotes));
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         noteList.setLayoutManager(layoutManager);
     }

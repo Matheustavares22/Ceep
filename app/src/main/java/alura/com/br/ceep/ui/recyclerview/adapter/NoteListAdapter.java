@@ -15,13 +15,13 @@ import java.util.List;
 import alura.com.br.ceep.R;
 import alura.com.br.ceep.dao.Note;
 
-public class noteListAdapter extends RecyclerView.Adapter {
+public class NoteListAdapter extends RecyclerView.Adapter {
 
     private final List<Note> notes;
     private static int createdViews = 0;
     private static int usedBindView = 0;
 
-    public noteListAdapter( List<Note> notes) {
+    public NoteListAdapter(List<Note> notes) {
         this.notes = notes;
     }
 
