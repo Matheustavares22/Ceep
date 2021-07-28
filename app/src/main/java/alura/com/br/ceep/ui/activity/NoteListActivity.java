@@ -20,16 +20,25 @@ public class NoteListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
 
-        RecyclerView noteList = findViewById(R.id.note_list_recyclerview);
+        List<Note> allNotes = sampleNotes();
+
+        configureRecyclerView(allNotes);
+    }
+
+    private List<Note> sampleNotes() {
         NoteDAO noteDAO = new NoteDAO();
 
-        for (int i = 0; i < 1000; i++) {
-            noteDAO.insert(new Note("note " + i, "hello world!"));
-        }
-        List<Note> allNotes = noteDAO.all();
+        noteDAO.insert(new Note("first note", "tiny description"), new Note("second note","a very big description huhhhhhhhhhhhh"));
 
+        return noteDAO.all();
+    }
+
+    private void configureRecyclerView(List<Note> allNotes) {
+        RecyclerView noteList = findViewById(R.id.note_list_recyclerview);
+        configureAdapter(allNotes, noteList);
+    }
+
+    private void configureAdapter(List<Note> allNotes, RecyclerView noteList) {
         noteList.setAdapter(new NoteListAdapter(allNotes));
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        noteList.setLayoutManager(layoutManager);
     }
 }

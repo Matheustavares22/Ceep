@@ -24,14 +24,15 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
     @NonNull
     @Override
     public NoteListAdapter.ViewHolderNote onCreateViewHolder(ViewGroup parent, int viewType) {
-        View createdView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false);
+        View createdView = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.item_note, parent, false);
         return new ViewHolderNote(createdView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NoteListAdapter.ViewHolderNote holder, int position) {
         Note note = notes.get(position);
-        ((ViewHolderNote) holder).bind(note);
+        holder.bind(note);
     }
 
     @Override
@@ -51,6 +52,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         }
 
         public void bind(Note note) {
+            fillFields(note);
+        }
+
+        private void fillFields(Note note) {
             tittle.setText(note.getTittle());
             description.setText(note.getDescription());
         }
