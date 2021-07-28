@@ -1,7 +1,5 @@
 package alura.com.br.ceep.ui.recyclerview.adapter;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +13,9 @@ import java.util.List;
 import alura.com.br.ceep.R;
 import alura.com.br.ceep.dao.Note;
 
-public class NoteListAdapter extends RecyclerView.Adapter {
+public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHolderNote> {
 
     private final List<Note> notes;
-    private static int createdViews = 0;
-    private static int usedBindView = 0;
 
     public NoteListAdapter(List<Note> notes) {
         this.notes = notes;
@@ -27,24 +23,15 @@ public class NoteListAdapter extends RecyclerView.Adapter {
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View createdView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_note, parent, false);
-        Log.i("recycler view adapter", "view holder created: " + createdViews++);
+    public NoteListAdapter.ViewHolderNote onCreateViewHolder(ViewGroup parent, int viewType) {
+        View createdView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false);
         return new ViewHolderNote(createdView);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NoteListAdapter.ViewHolderNote holder, int position) {
         Note note = notes.get(position);
-        loadTextView(holder, R.id.item_note_tittle, note.getTittle(), position);
-        loadTextView(holder, R.id.item_note_description, note.getDescription(), position);
-    }
-
-    private void loadTextView(RecyclerView.ViewHolder holder, int targetTextView, String data, int position) {
-        TextView description = holder.itemView.findViewById(targetTextView);
-        description.setText(data);
-        Log.i("recycler view adapter", "binds: "+ usedBindView++ + " position " + position);
+        ((ViewHolderNote) holder).bind(note);
     }
 
     @Override
@@ -54,8 +41,19 @@ public class NoteListAdapter extends RecyclerView.Adapter {
 
     static class ViewHolderNote extends RecyclerView.ViewHolder {
 
+        private final TextView tittle;
+        private final TextView description;
+
         public ViewHolderNote(View itemView) {
             super(itemView);
+            this.tittle = itemView.findViewById(R.id.item_note_tittle);
+            this.description = itemView.findViewById(R.id.item_note_description);
         }
+
+        public void bind(Note note) {
+            tittle.setText(note.getTittle());
+            description.setText(note.getDescription());
+        }
+
     }
 }
