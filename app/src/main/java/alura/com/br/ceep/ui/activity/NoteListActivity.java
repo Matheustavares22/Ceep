@@ -1,9 +1,11 @@
 package alura.com.br.ceep.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -28,7 +30,15 @@ public class NoteListActivity extends AppCompatActivity {
     private List<Note> sampleNotes() {
         NoteDAO noteDAO = new NoteDAO();
 
-        noteDAO.insert(new Note("first note", "tiny description"), new Note("second note","a very big description huhhhhhhhhhhhh"));
+        noteDAO.insert(new Note("first note", "tiny description"), new Note("second note", "a very big description huhhhhhhhhhhhh"));
+
+        TextView buttonInsertNote = findViewById(R.id.note_list_insert_note);
+        buttonInsertNote.setOnClickListener(v -> {
+            Intent startFormNoteActivity = new Intent(NoteListActivity.this, FormNoteActivity.class);
+            startActivity(startFormNoteActivity);
+        });
+
+
 
         return noteDAO.all();
     }
