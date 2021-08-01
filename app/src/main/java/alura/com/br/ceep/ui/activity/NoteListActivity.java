@@ -51,4 +51,12 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureAdapter(List<Note> allNotes, RecyclerView noteList) {
         noteList.setAdapter(new NoteListAdapter(allNotes));
     }
+
+    @Override
+    protected void onResume() {
+        NoteDAO noteDAO = new NoteDAO();
+        List<Note> allNotes = noteDAO.all();
+        configureRecyclerView(allNotes);
+        super.onResume();
+    }
 }
