@@ -2,4 +2,5 @@
     <string name="app_name">Ceep</string>
     <string name="description">Description</string>
     <string name="tittle">Tittle</string>
+    <string name="save_note">Save note</string>
 </resources>
