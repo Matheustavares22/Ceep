@@ -1,6 +1,8 @@
 package alura.com.br.ceep.dao;
 
-public class Note {
+import java.io.Serializable;
+
+public class Note implements Serializable {
 
     private final String tittle;
     private final String description;

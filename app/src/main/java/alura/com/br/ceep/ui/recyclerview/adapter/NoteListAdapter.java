@@ -59,6 +59,10 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
             tittle.setText(note.getTittle());
             description.setText(note.getDescription());
         }
+    }
 
+    public void add(Note note) {
+        this.notes.add(note);
+        notifyDataSetChanged();
     }
 }
