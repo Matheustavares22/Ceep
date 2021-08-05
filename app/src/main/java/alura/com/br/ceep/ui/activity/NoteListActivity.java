@@ -7,6 +7,7 @@ import static alura.com.br.ceep.ui.activity.NoteActivityConstants.RESULT_CODE_CR
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import alura.com.br.ceep.R;
 import alura.com.br.ceep.dao.Note;
 import alura.com.br.ceep.model.NoteDAO;
 import alura.com.br.ceep.ui.recyclerview.adapter.NoteListAdapter;
+import alura.com.br.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
+
 
 public class NoteListActivity extends AppCompatActivity {
 
@@ -50,8 +53,10 @@ public class NoteListActivity extends AppCompatActivity {
 
     private List<Note> getAllNotes() {
         NoteDAO noteDao = new NoteDAO();
-        List<Note> allNotes = noteDao.all();
-        return allNotes;
+        for (int i = 0; i < 10; i++) {
+            noteDao.insert(new Note("note " + i, "again, its note" + i));
+        }
+        return noteDao.all();
     }
 
     private void configureRecyclerView(List<Note> allNotes) {
@@ -62,6 +67,12 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureAdapter(List<Note> allNotes, RecyclerView noteList) {
         adapter = new NoteListAdapter(allNotes);
         noteList.setAdapter(adapter);
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(Note note) {
+                Toast.makeText(NoteListActivity.this, "you clicked in " + note.getTittle(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
