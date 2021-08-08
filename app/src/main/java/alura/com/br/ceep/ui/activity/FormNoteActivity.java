@@ -1,26 +1,48 @@
 package alura.com.br.ceep.ui.activity;
 
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_NOTE;
+import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_POSITION;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.RESULT_CODE_CREATED_NOTE;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.w3c.dom.Text;
+
+import java.io.Serializable;
 
 import alura.com.br.ceep.R;
 import alura.com.br.ceep.dao.Note;
 
 public class FormNoteActivity extends AppCompatActivity {
 
+    private Integer receivedPosition;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_note);
+        Intent receivedData = getIntent();
+        if(receivedData.hasExtra(KEY_NOTE) && receivedData.hasExtra(KEY_POSITION)){
+            receivedPosition = receivedData.getIntExtra(KEY_POSITION, -1);
+            Note receivedNote = (Note) receivedData.getSerializableExtra(KEY_NOTE);
+
+            loadTextView(R.id.form_note_tittle, receivedNote.getTittle());
+            loadTextView(R.id.form_note_description, receivedNote.getDescription());
+        }
+    }
+
+    private void loadTextView(int targetTextView, String data) {
+        TextView textView = findViewById(targetTextView);
+        textView.setText(data);
     }
 
     @Override
@@ -42,6 +64,7 @@ public class FormNoteActivity extends AppCompatActivity {
     private void returnNote(Note note) {
         Intent insertResult = new Intent();
         insertResult.putExtra(KEY_NOTE, note);
+        insertResult.putExtra(KEY_POSITION,receivedPosition);
         setResult(RESULT_CODE_CREATED_NOTE, insertResult);
     }
 

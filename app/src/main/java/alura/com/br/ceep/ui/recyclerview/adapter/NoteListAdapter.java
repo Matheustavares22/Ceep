@@ -47,6 +47,11 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
         return notes.size();
     }
 
+    public void change(Integer position, Note note) {
+        this.notes.set(position, note);
+        notifyDataSetChanged();
+    }
+
     static class ViewHolderNote extends RecyclerView.ViewHolder {
 
         private final TextView tittle;
@@ -58,7 +63,7 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
             this.tittle = itemView.findViewById(R.id.item_note_tittle);
             this.description = itemView.findViewById(R.id.item_note_description);
             itemView.setOnClickListener(v -> {
-                onItemClickListener.onItemClick(note);
+                onItemClickListener.onItemClick(note, getAbsoluteAdapterPosition());
             });
         }
 

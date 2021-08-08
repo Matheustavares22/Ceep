@@ -19,7 +19,7 @@ public class NoteDAO {
         NoteDAO.Notes.addAll(Arrays.asList(notes));
     }
 
-    public void alert(int position, Note note) {
+    public void change(int position, Note note) {
         Notes.set(position, note);
     }
 

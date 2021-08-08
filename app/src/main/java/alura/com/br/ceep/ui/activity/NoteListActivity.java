@@ -1,6 +1,7 @@
 package alura.com.br.ceep.ui.activity;
 
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_NOTE;
+import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_POSITION;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.REQUEST_CODE_INSERT_NOTE;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.RESULT_CODE_CREATED_NOTE;
 
@@ -69,17 +70,28 @@ public class NoteListActivity extends AppCompatActivity {
         noteList.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(Note note) {
-                Toast.makeText(NoteListActivity.this, "you clicked in " + note.getTittle(), Toast.LENGTH_SHORT).show();
+            public void onItemClick(Note note, Integer position) {
+                Intent openFormNote = new Intent(NoteListActivity.this, FormNoteActivity.class);
+                openFormNote.putExtra(KEY_NOTE, note);
+                openFormNote.putExtra(KEY_POSITION, position);
+                startActivityForResult(openFormNote, 2);
             }
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (isNote(requestCode, resultCode, data)) {
+        if (requestCode == REQUEST_CODE_INSERT_NOTE && resultCode == RESULT_CODE_CREATED_NOTE && data.hasExtra(KEY_NOTE)) {
             Note note = (Note) data.getSerializableExtra(KEY_NOTE);
             addNote(note);
+        }
+
+        if (requestCode == 2 && resultCode == RESULT_CODE_CREATED_NOTE && data.hasExtra(KEY_NOTE)) {
+            Note receivedNote = (Note) data.getSerializableExtra(KEY_NOTE);
+            Integer receivedPosition = data.getIntExtra(KEY_POSITION, -1);
+            new NoteDAO().change(receivedPosition, receivedNote);
+            adapter.change(receivedPosition, receivedNote);
+            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -88,10 +100,5 @@ public class NoteListActivity extends AppCompatActivity {
         new NoteDAO().insert(note);
         adapter.add(note);
     }
-
-    private boolean isNote(int requestCode, int resultCode, Intent data) {
-        return requestCode == REQUEST_CODE_INSERT_NOTE && resultCode == RESULT_CODE_CREATED_NOTE && data.hasExtra(KEY_NOTE);
-    }
-
 
 }

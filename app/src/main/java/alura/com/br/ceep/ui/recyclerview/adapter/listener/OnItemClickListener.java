@@ -4,6 +4,6 @@ import alura.com.br.ceep.dao.Note;
 
 public interface OnItemClickListener {
 
-    void onItemClick(Note note);
+    void onItemClick(Note note, Integer position);
 
 }
