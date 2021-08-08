@@ -28,7 +28,7 @@
         android:background="@android:color/transparent"
         android:gravity="top"
         android:hint="@string/description"
-        android:lines="5"
+        android:lines="@integer/material_motion_duration_long_1"
         android:maxLines="20"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,5 +1,6 @@
 package alura.com.br.ceep.ui.activity;
 
+import static alura.com.br.ceep.ui.activity.NoteActivityConstants.INVALID_POSITION;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_NOTE;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_POSITION;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.REQUEST_CODE_INSERT_NOTE;
@@ -74,7 +75,7 @@ public class NoteListActivity extends AppCompatActivity {
                 Intent openFormNote = new Intent(NoteListActivity.this, FormNoteActivity.class);
                 openFormNote.putExtra(KEY_NOTE, note);
                 openFormNote.putExtra(KEY_POSITION, position);
-                startActivityForResult(openFormNote, 2);
+                startActivityForResult(openFormNote, RESULT_CODE_CREATED_NOTE);
             }
         });
     }
@@ -86,9 +87,9 @@ public class NoteListActivity extends AppCompatActivity {
             addNote(note);
         }
 
-        if (requestCode == 2 && resultCode == RESULT_CODE_CREATED_NOTE && data.hasExtra(KEY_NOTE)) {
+        if (requestCode == RESULT_CODE_CREATED_NOTE && resultCode == RESULT_CODE_CREATED_NOTE && data.hasExtra(KEY_NOTE)) {
             Note receivedNote = (Note) data.getSerializableExtra(KEY_NOTE);
-            Integer receivedPosition = data.getIntExtra(KEY_POSITION, -1);
+            Integer receivedPosition = data.getIntExtra(KEY_POSITION, INVALID_POSITION);
             new NoteDAO().change(receivedPosition, receivedNote);
             adapter.change(receivedPosition, receivedNote);
             Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
