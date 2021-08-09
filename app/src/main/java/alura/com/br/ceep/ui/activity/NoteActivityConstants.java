@@ -7,5 +7,5 @@ public interface NoteActivityConstants {
     int INVALID_POSITION = -1;
     int REQUEST_CODE_INSERT_NOTE = 1;
     int RESULT_CODE_CREATED_NOTE = 2;
-
+    int RESULT_CODE_CHANGE_NOTE = 2;
 }

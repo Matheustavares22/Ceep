@@ -21,13 +21,13 @@ import alura.com.br.ceep.R;
 import alura.com.br.ceep.dao.Note;
 import alura.com.br.ceep.model.NoteDAO;
 import alura.com.br.ceep.ui.recyclerview.adapter.NoteListAdapter;
-import alura.com.br.ceep.ui.recyclerview.adapter.listener.OnItemClickListener;
 
 
 public class NoteListActivity extends AppCompatActivity {
 
 
     private NoteListAdapter adapter;
+    private Note note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +44,11 @@ public class NoteListActivity extends AppCompatActivity {
     private void buttonInsertNote() {
         TextView buttonInsertNote = findViewById(R.id.note_list_insert_note);
         buttonInsertNote.setOnClickListener(v -> {
-            goToFormNoteActivity();
+            goToFormNoteActivityInsertNote();
         });
     }
 
-    private void goToFormNoteActivity() {
+    private void goToFormNoteActivityInsertNote() {
         Intent startFormNoteActivity = new Intent(NoteListActivity.this, FormNoteActivity.class);
         startActivityForResult(startFormNoteActivity, REQUEST_CODE_INSERT_NOTE);
     }
@@ -69,32 +69,59 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureAdapter(List<Note> allNotes, RecyclerView noteList) {
         adapter = new NoteListAdapter(allNotes);
         noteList.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(Note note, Integer position) {
-                Intent openFormNote = new Intent(NoteListActivity.this, FormNoteActivity.class);
-                openFormNote.putExtra(KEY_NOTE, note);
-                openFormNote.putExtra(KEY_POSITION, position);
-                startActivityForResult(openFormNote, RESULT_CODE_CREATED_NOTE);
-            }
-        });
+        adapter.setOnItemClickListener(this::goToFormNoteActivityChangeNote);
+    }
+
+    private void goToFormNoteActivityChangeNote(Note note, Integer position) {
+        Intent openFormNote = new Intent(NoteListActivity.this, FormNoteActivity.class);
+        openFormNote.putExtra(KEY_NOTE, note);
+        openFormNote.putExtra(KEY_POSITION, position);
+        startActivityForResult(openFormNote, RESULT_CODE_CREATED_NOTE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == REQUEST_CODE_INSERT_NOTE && resultCode == RESULT_CODE_CREATED_NOTE && data.hasExtra(KEY_NOTE)) {
+        if (resultCreatingNote(requestCode, resultCode, data)) {
+            assert data != null;
             Note note = (Note) data.getSerializableExtra(KEY_NOTE);
             addNote(note);
         }
 
-        if (requestCode == RESULT_CODE_CREATED_NOTE && resultCode == RESULT_CODE_CREATED_NOTE && data.hasExtra(KEY_NOTE)) {
+        if (resultEditingNote(requestCode, resultCode, data)) {
+            assert data != null;
             Note receivedNote = (Note) data.getSerializableExtra(KEY_NOTE);
             Integer receivedPosition = data.getIntExtra(KEY_POSITION, INVALID_POSITION);
-            new NoteDAO().change(receivedPosition, receivedNote);
-            adapter.change(receivedPosition, receivedNote);
-            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+            if(isaValidPosition(receivedPosition)) {
+                changeNote(receivedNote, receivedPosition);
+                Toast.makeText(this, R.string.save_note_msg, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.save_note_error_msg, Toast.LENGTH_SHORT).show();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void changeNote(Note note, Integer position) {
+        new NoteDAO().change(position, note);
+        adapter.change(position, note);
+    }
+
+    private boolean isaValidPosition(Integer receivedPosition) {
+        return receivedPosition > INVALID_POSITION;
+    }
+
+    private boolean resultEditingNote(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode != NoteActivityConstants.RESULT_CODE_CREATED_NOTE || resultCode != RESULT_CODE_CREATED_NOTE)
+            return false;
+        assert data != null;
+        return data.hasExtra(KEY_NOTE);
+    }
+
+    private boolean resultCreatingNote(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode != NoteActivityConstants.REQUEST_CODE_INSERT_NOTE || resultCode != RESULT_CODE_CREATED_NOTE)
+            return false;
+        assert data != null;
+        return data.hasExtra(KEY_NOTE);
     }
 
     private void addNote(Note note) {

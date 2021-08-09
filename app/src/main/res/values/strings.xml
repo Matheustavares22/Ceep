@@ -3,4 +3,6 @@
     <string name="description">Description</string>
     <string name="tittle">Tittle</string>
     <string name="save_note">Save note</string>
+    <string name="save_note_msg">Saved</string>
+    <string name="save_note_error_msg">There was a problem saving the edited note</string>
 </resources>
