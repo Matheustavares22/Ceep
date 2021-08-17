@@ -3,7 +3,7 @@ package alura.com.br.ceep.ui.activity;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.INVALID_POSITION;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_NOTE;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_POSITION;
-import static alura.com.br.ceep.ui.activity.NoteActivityConstants.RESULT_CODE_CHANGE_NOTE;
+import static alura.com.br.ceep.ui.activity.NoteActivityConstants.CODE_CHANGE_NOTE;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,7 +70,7 @@ public class FormNoteActivity extends AppCompatActivity {
         Intent insertResult = new Intent();
         insertResult.putExtra(KEY_NOTE, note);
         insertResult.putExtra(KEY_POSITION, receivedPosition);
-        setResult(RESULT_CODE_CHANGE_NOTE, insertResult);
+        setResult(CODE_CHANGE_NOTE, insertResult);
     }
 
     private Note createNote() {
