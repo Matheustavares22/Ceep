@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
 import java.util.List;
 
 import alura.com.br.ceep.R;
@@ -49,6 +50,16 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
 
     public void change(Integer position, Note note) {
         this.notes.set(position, note);
+        notifyDataSetChanged();
+    }
+
+    public void remove(int position) {
+        this.notes.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void trade(int initialPosition, int endPosition) {
+        Collections.swap(notes, initialPosition, endPosition);
         notifyDataSetChanged();
     }
 

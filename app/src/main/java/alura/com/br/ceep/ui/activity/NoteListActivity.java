@@ -6,7 +6,6 @@ import static alura.com.br.ceep.ui.activity.NoteActivityConstants.INVALID_POSITI
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_NOTE;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_POSITION;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -22,6 +22,7 @@ import alura.com.br.ceep.R;
 import alura.com.br.ceep.dao.Note;
 import alura.com.br.ceep.model.NoteDAO;
 import alura.com.br.ceep.ui.recyclerview.adapter.NoteListAdapter;
+import alura.com.br.ceep.ui.recyclerview.helper.callback.NoteItemTouchHelperCallBack;
 
 
 public class NoteListActivity extends AppCompatActivity {
@@ -51,9 +52,7 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureAdapter(List<Note> allNotes, RecyclerView noteList) {
         adapter = new NoteListAdapter(allNotes);
         noteList.setAdapter(adapter);
-        adapter.setOnItemClickListener((note, position) -> {
-            goToFormNoteActivityChangeNote(note, position);
-        });
+        adapter.setOnItemClickListener(this::goToFormNoteActivityChangeNote);
     }
 
     private void goToFormNoteActivityInsertNote() {
@@ -79,6 +78,12 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureRecyclerView(List<Note> allNotes) {
         RecyclerView noteList = findViewById(R.id.note_list_recyclerview);
         configureAdapter(allNotes, noteList);
+        configureItemTouchHelper(noteList);
+    }
+
+    private void configureItemTouchHelper(RecyclerView noteList) {
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new NoteItemTouchHelperCallBack(adapter));
+        itemTouchHelper.attachToRecyclerView(noteList);
     }
 
     @Override

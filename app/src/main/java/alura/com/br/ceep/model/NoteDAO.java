@@ -22,7 +22,6 @@ public class NoteDAO {
     public void change(int position, Note note) {
         Notes.set(position, note);
     }
-
     public void remove(int position) {
         Notes.remove(position);
     }
