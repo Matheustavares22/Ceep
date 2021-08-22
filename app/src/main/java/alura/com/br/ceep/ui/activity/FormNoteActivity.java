@@ -28,11 +28,13 @@ public class FormNoteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_note);
 
+        setTitle(getString(R.string.appbar_FormNoteActivity_insertNote));
         initiateFields();
 
         Intent receivedData = getIntent();
 
         if (receivedData.hasExtra(KEY_NOTE)) {
+            setTitle(getString(R.string.appbar_FormNoteActivity_changeNote));
             receivedPosition = receivedData.getIntExtra(KEY_POSITION, INVALID_POSITION);
             Note receivedNote = (Note) receivedData.getSerializableExtra(KEY_NOTE);
 

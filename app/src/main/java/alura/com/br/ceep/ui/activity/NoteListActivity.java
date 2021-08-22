@@ -34,7 +34,7 @@ public class NoteListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note_list);
-
+        setTitle(getString(R.string.appbar_NoteListActivity));
         List<Note> allNotes = getAllNotes();
 
         configureRecyclerView(allNotes);
@@ -89,7 +89,7 @@ public class NoteListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (isaResultCreatingNote(requestCode)) {
-            if(isResultOk(resultCode)) {
+            if (isResultOk(resultCode)) {
                 Note note = (Note) data.getSerializableExtra(KEY_NOTE);
                 addNote(note);
                 toastMessage(R.string.save_note_msg);
@@ -97,7 +97,7 @@ public class NoteListActivity extends AppCompatActivity {
         }
 
         if (isaResultChangeNote(requestCode, data)) {
-            if(isResultOk(resultCode)) {
+            if (isResultOk(resultCode)) {
                 Note receivedNote = (Note) data.getSerializableExtra(KEY_NOTE);
                 Integer receivedPosition = data.getIntExtra(KEY_POSITION, INVALID_POSITION);
 
@@ -141,7 +141,7 @@ public class NoteListActivity extends AppCompatActivity {
     }
 
     private boolean hasNote(Intent data) {
-        return data.hasExtra(KEY_NOTE);
+        return data != null && data.hasExtra(KEY_NOTE);
     }
 
     private void changeNote(Note note, Integer position) {

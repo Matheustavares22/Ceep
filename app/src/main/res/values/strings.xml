@@ -5,4 +5,7 @@
     <string name="save_note">Save note</string>
     <string name="save_note_msg">Saved</string>
     <string name="save_note_error_msg">There was a problem saving the edited note</string>
+    <string name="appbar_NoteListActivity">Notes</string>
+    <string name="appbar_FormNoteActivity_insertNote">Insert note</string>
+    <string name="appbar_FormNoteActivity_changeNote">Change Note</string>
 </resources>
