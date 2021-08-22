@@ -70,7 +70,7 @@ public class FormNoteActivity extends AppCompatActivity {
         Intent insertResult = new Intent();
         insertResult.putExtra(KEY_NOTE, note);
         insertResult.putExtra(KEY_POSITION, receivedPosition);
-        setResult(CODE_CHANGE_NOTE, insertResult);
+        setResult(RESULT_OK, insertResult);
     }
 
     private Note createNote() {

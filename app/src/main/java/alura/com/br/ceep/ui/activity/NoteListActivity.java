@@ -1,19 +1,17 @@
 package alura.com.br.ceep.ui.activity;
 
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.CODE_CHANGE_NOTE;
-import static alura.com.br.ceep.ui.activity.NoteActivityConstants.CODE_CREATED_NOTE;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.CODE_INSERT_NOTE;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.INVALID_POSITION;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_NOTE;
 import static alura.com.br.ceep.ui.activity.NoteActivityConstants.KEY_POSITION;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,7 +51,9 @@ public class NoteListActivity extends AppCompatActivity {
     private void configureAdapter(List<Note> allNotes, RecyclerView noteList) {
         adapter = new NoteListAdapter(allNotes);
         noteList.setAdapter(adapter);
-        adapter.setOnItemClickListener(this::goToFormNoteActivityChangeNote);
+        adapter.setOnItemClickListener((note, position) -> {
+            goToFormNoteActivityChangeNote(note, position);
+        });
     }
 
     private void goToFormNoteActivityInsertNote() {
@@ -84,20 +84,24 @@ public class NoteListActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (isaResultCreatingNote(requestCode)) {
-            Note note = (Note) data.getSerializableExtra(KEY_NOTE);
-            addNote(note);
-            toastMessage(R.string.save_note_msg);
+            if(isResultOk(resultCode)) {
+                Note note = (Note) data.getSerializableExtra(KEY_NOTE);
+                addNote(note);
+                toastMessage(R.string.save_note_msg);
+            }
         }
 
-        if (isaResultChangeNote(requestCode, resultCode, data)) {
-            Note receivedNote = (Note) data.getSerializableExtra(KEY_NOTE);
-            Integer receivedPosition = data.getIntExtra(KEY_POSITION, INVALID_POSITION);
+        if (isaResultChangeNote(requestCode, data)) {
+            if(isResultOk(resultCode)) {
+                Note receivedNote = (Note) data.getSerializableExtra(KEY_NOTE);
+                Integer receivedPosition = data.getIntExtra(KEY_POSITION, INVALID_POSITION);
 
-            if (isaValidPosition(receivedPosition)) {
-                changeNote(receivedNote, receivedPosition);
-                toastMessage(R.string.save_note_msg);
-            } else {
-                toastMessage(R.string.save_note_error_msg);
+                if (isaValidPosition(receivedPosition)) {
+                    changeNote(receivedNote, receivedPosition);
+                    toastMessage(R.string.save_note_msg);
+                } else {
+                    toastMessage(R.string.save_note_error_msg);
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -107,16 +111,16 @@ public class NoteListActivity extends AppCompatActivity {
         Toast.makeText(this, messageText, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean isaResultChangeNote(int requestCode, int resultCode, Intent data) {
-        return isaCodeChangeNote(requestCode) && isaCodeCreatedNote(resultCode) && hasNote(data);
+    private boolean isaResultChangeNote(int requestCode, Intent data) {
+        return isaCodeChangeNote(requestCode) && hasNote(data);
     }
 
     private boolean isaResultCreatingNote(int requestCode) {
         return isaCodeInsertNote(requestCode);
     }
 
-    private boolean isaCodeCreatedNote(int resultCode) {
-        return resultCode == CODE_CREATED_NOTE;
+    private boolean isResultOk(int resultCode) {
+        return resultCode == RESULT_OK;
     }
 
     private boolean isaCodeChangeNote(int code) {
