@@ -69,9 +69,6 @@ public class NoteListActivity extends AppCompatActivity {
 
     private List<Note> getAllNotes() {
         NoteDAO noteDao = new NoteDAO();
-        for (int i = 0; i < 10; i++) {
-            noteDao.insert(new Note("note " + i, "again, its note" + i));
-        }
         return noteDao.all();
     }
 

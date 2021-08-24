@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,17 +49,17 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListAdapter.ViewHo
 
     public void change(Integer position, Note note) {
         this.notes.set(position, note);
-        notifyDataSetChanged();
+        notifyItemChanged(position);
     }
 
     public void remove(int position) {
         this.notes.remove(position);
-        notifyDataSetChanged();
+        notifyItemRemoved(position);
     }
 
     public void trade(int initialPosition, int endPosition) {
         Collections.swap(notes, initialPosition, endPosition);
-        notifyDataSetChanged();
+        notifyItemMoved(initialPosition, endPosition);
     }
 
     static class ViewHolderNote extends RecyclerView.ViewHolder {
